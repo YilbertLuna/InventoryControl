@@ -1,0 +1,54 @@
+services:
+  postgresql:
+    container_name: inv_postgres
+    image: postgres:16.0-alpine
+    ports:
+      - 5432:5432
+    volumes:
+      - inv_postgresql:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=inventoryControlDB
+    networks:
+      - inv_network
+    healthcheck:
+      test: pg_isready -U admin -d inventoryControlDB
+      interval: 2s
+      timeout: 3s
+      retries: 5
+
+  webserver:
+    container_name: inv_webserver
+    image: inv_webserver
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    ports:
+      - 6060:6060
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
+    command: ["npm", "run", "dev"]
+    env_file:
+      - ./.env
+    depends_on:
+      postgresql:
+       condition: service_healthy
+    networks:
+      - inv_network
+
+networks:
+  inv_network:
+    name: inv_network
+    driver: bridge
+
+volumes:
+  inv_postgresql:
+    name: inv_postgresql
