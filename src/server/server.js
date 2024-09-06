@@ -1,10 +1,19 @@
 import express from "express";
 import morgan from "morgan";
 
+import ProductsRouter from "../routes/products.routes.js";
+import CategoryRouter from "../routes/category.routes.js";
+
 const app = express();
 
 // use morgan
 app.use(morgan('dev'))
+app.use(express.json())
+
+//use routes
+app.use('/api', ProductsRouter)
+app.use('/api', CategoryRouter)
+
 
 app.use('/', (req, res) => {
     res.header('Content-Type', 'application/json');
@@ -16,7 +25,6 @@ app.use('/', (req, res) => {
         uptime: process.uptime(),
     })
 
-    console.log('hello')
 })
 
 export default app
