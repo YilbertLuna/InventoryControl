@@ -1,29 +1,27 @@
 import { Router } from "express";
 
+import { createdCategory } from "../controllers/category/categories.controller.js";
+
 const CategoryRouter = Router()
 
-CategoryRouter.post('/createdCategory', (req , res) => {
-    res.header('Content-Type', 'application/json')
+CategoryRouter.post('/createdCategory', createdCategory);
 
-    res.status(200).json('i am creating a category')
-})
+// CategoryRouter.delete('/deletedCategory', (req, res) => {
+//     res.header('Content-Type', 'application/json')
 
-CategoryRouter.delete('/deletedCategory', (req, res) => {
-    res.header('Content-Type', 'application/json')
+//     res.status(200).json('i am deleting a category')
+// })
 
-    res.status(200).json('i am deleting a category')
-})
+// CategoryRouter.get('/categories', (req, res) => {
+//     res.header('Content-Type', 'application/json')
 
-CategoryRouter.get('/categories', (req, res) => {
-    res.header('Content-Type', 'application/json')
+//     res.status(200).json('i am getting all categories')
+// })
 
-    res.status(200).json('i am getting all categories')
-})
+// CategoryRouter.get('/category/:id', (req, res) => {
+//     res.header('Content-Type', 'application/json')
 
-CategoryRouter.get('/category/:id', (req, res) => {
-    res.header('Content-Type', 'application/json')
-
-    res.status(200).json(`i am getting category with id: ${req.params.id}`)
-})
+//     res.status(200).json(`i am getting category with id: ${req.params.id}`)
+// })
 
 export default CategoryRouter
