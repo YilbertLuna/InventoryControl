@@ -26,6 +26,8 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - 6060:6060
+    volumes:
+      - ./:/app
     develop:
       watch:
         - action: sync
@@ -35,14 +37,15 @@ services:
             - node_modules/
         - action: rebuild
           path: ./package.json
-    command: ["npm", "run", "dev"]
+    command: [ "npm", "run", "dev" ]
     env_file:
       - ./.env
     depends_on:
       postgresql:
-       condition: service_healthy
+        condition: service_healthy
     networks:
       - inv_network
+    restart: on-failure
 
 networks:
   inv_network:
